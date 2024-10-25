@@ -3,17 +3,22 @@ import { Input } from '@repo/ui/components/ui/input';
 import { Label } from '@repo/ui/components/ui/label';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { PropsWithChildren } from 'react';
+import { useToast } from "@repo/ui/hooks/use-toast"
 
 const WorkspaceForm = ({ children }: PropsWithChildren) => {
     const queryClient = useQueryClient();
-
+    const { toast } = useToast()
     const mutation = useMutation({
         mutationFn: async (formData: FormData) => createWorkspace(undefined, formData),
         onSuccess: () => {
-            // Invalidate and refetch any relevant queries
             queryClient.invalidateQueries({
                 queryKey: ['workspaces']
             });
+
+            toast({
+                title: "Success",
+                description: "You've created a new workspace!",
+            })
 
         },
         onError: (error: any) => {

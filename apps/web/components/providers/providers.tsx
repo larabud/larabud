@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import * as React from 'react'
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 import { ThemeProvider } from './theme-provider'
+import { Toaster } from '@repo/ui/components/ui/toaster'
 
 function makeQueryClient() {
     return new QueryClient({
@@ -44,9 +45,10 @@ export function Providers(props: { children: React.ReactNode }) {
                     disableTransitionOnChange
                 >
                     {props.children}
+                    <Toaster />
                 </ThemeProvider>
             </ReactQueryStreamedHydration>
             <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        </QueryClientProvider >
     )
 }
