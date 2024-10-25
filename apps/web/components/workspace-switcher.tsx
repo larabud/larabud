@@ -41,6 +41,7 @@ import {
 } from "@repo/ui/components/ui/command";
 import WorkspaceForm from "./forms/workspaceForm";
 import SubmitButton from "./ui/submit-button";
+import { Workspace } from "@/lib/type";
 
 const WorkspaceSwitcher = () => {
 
@@ -89,7 +90,7 @@ const WorkspaceSwitcher = () => {
                         <CommandInput placeholder="Search workspace..." />
                         <CommandList>
                             <CommandEmpty>No workspace found.</CommandEmpty>
-                            {workspaces.map((workspace) => (
+                            {workspaces.map((workspace: Workspace) => (
                                 <CommandItem
                                     key={workspace.id}
                                     onSelect={() => {
