@@ -148,7 +148,7 @@ const WorkspaceSwitcher = () => {
                         <Button variant="outline" onClick={() => setShowNewWorkspaceDialog(false)}>
                             Cancel
                         </Button>
-                        <SubmitButton onClick={() => setShowNewWorkspaceDialog(false)}>Create</SubmitButton>
+                        <SubmitButton fullWidth={false} onClick={() => setShowNewWorkspaceDialog(false)}>Create</SubmitButton>
                     </DialogFooter>
                 </WorkspaceForm>
             </DialogContent>

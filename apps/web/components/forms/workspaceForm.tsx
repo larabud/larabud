@@ -23,6 +23,10 @@ const WorkspaceForm = ({ children }: PropsWithChildren) => {
         },
         onError: (error: any) => {
             console.error("Error creating workspace:", error);
+            toast({
+                title: "Error",
+                description: "Error creating workspace!",
+            })
         }
     });
 
