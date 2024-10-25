@@ -9,19 +9,6 @@ export type FormState = {
     message?: string;
 } | undefined;
 
-export type WorkspaceFormState = {
-    error?: {
-        name?: string[];
-    },
-    message?: string;
-} | undefined;
-
-export const WorkspaceFormSchema = z.object({
-    name: z
-        .string()
-        .min(2, { message: "Name must be at least 2 characters long." })
-        .trim(),
-})
 
 export const SignupFormSchema = z.object({
     name: z
@@ -62,7 +49,7 @@ export type Session = {
     refreshToken: string
 }
 
-export type Workspace = {
+export interface Workspace {
     id: string,
     name: string
 }
