@@ -61,3 +61,8 @@ export type Session = {
     accessToken: string,
     refreshToken: string
 }
+
+export type Workspace = {
+    id: string,
+    name: string
+}
