@@ -12,6 +12,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh-token.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { ClsModule } from 'nestjs-cls';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshConfig),
     ConfigModule.forFeature(githubOauthConfig),
+    ClsModule.forFeature()
   ],
   controllers: [AuthController],
   providers: [

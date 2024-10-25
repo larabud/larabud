@@ -9,6 +9,19 @@ export type FormState = {
     message?: string;
 } | undefined;
 
+export type WorkspaceFormState = {
+    error?: {
+        name?: string[];
+    },
+    message?: string;
+} | undefined;
+
+export const WorkspaceFormSchema = z.object({
+    name: z
+        .string()
+        .min(2, { message: "Name must be at least 2 characters long." })
+        .trim(),
+})
 
 export const SignupFormSchema = z.object({
     name: z

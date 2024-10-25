@@ -33,4 +33,8 @@ export class UserService {
             }
         })
     }
+
+    async findAll() {
+        return await this.prisma.users.findMany()
+    }
 }

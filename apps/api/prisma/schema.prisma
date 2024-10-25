@@ -14,10 +14,28 @@ datasource db {
 }
 
 model users {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  password   String
+  workspaces workspaces[] @relation("UserWorkspaces")
 
   @@index([id], map: "idIndex")
+}
+
+model workspaces {
+  id       String     @id @default(cuid())
+  name     String
+  users    users[]    @relation("UserWorkspaces")
+  projects projects[] @relation("WorkspaceProjects")
+}
+
+model projects {
+  id           Int        @id @default(autoincrement())
+  name         String
+  description  String?
+  workspace    workspaces @relation("WorkspaceProjects", fields: [workspace_id], references: [id])
+  workspace_id String
+
+  @@index([id], map: "projectIdIndex")
 }

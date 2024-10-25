@@ -50,21 +50,28 @@ export async function removeSession() {
 
 export async function updateTokens({
     accessToken,
-    refreshToken
-}: { accessToken: string, refreshToken: string }) {
-    const cookie = cookies().get("session")?.value
-    if (!cookie) return null
-    const { payload } = await jwtVerify<Session>(cookie, encodedKey)
+    refreshToken,
+}: {
+    accessToken: string;
+    refreshToken: string;
+}) {
+    const cookie = cookies().get("session")?.value;
+    if (!cookie) return null;
 
-    if (!payload) throw new Error("Session not found!")
+    const { payload } = await jwtVerify<Session>(
+        cookie,
+        encodedKey
+    );
+
+    if (!payload) throw new Error("Session not found");
 
     const newPayload: Session = {
         user: {
-            ...payload.user
+            ...payload.user,
         },
         accessToken,
-        refreshToken
-    }
+        refreshToken,
+    };
 
-    await createSession(newPayload)
+    await createSession(newPayload);
 }
