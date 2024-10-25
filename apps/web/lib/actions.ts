@@ -12,6 +12,7 @@ export const getWorkspaces = async () => {
 
 
 export async function createWorkspace(state: WorkspaceFormState, formData: FormData): Promise<WorkspaceFormState> {
+
     const validatedFields = WorkspaceFormSchema.safeParse({
         name: formData.get("name"),
     });
@@ -30,6 +31,7 @@ export async function createWorkspace(state: WorkspaceFormState, formData: FormD
     });
 
     if (!response.ok) {
+
         return {
             message: response.status === 409
                 ? "A project with this title already exists"
