@@ -62,7 +62,7 @@ export type Session = {
     refreshToken: string
 }
 
-export type Workspace = {
+export interface Workspace {
     id: string,
     name: string
 }

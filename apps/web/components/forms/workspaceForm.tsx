@@ -1,39 +1,21 @@
-import { createWorkspace } from '@/lib/actions';
+"use client"
 import { Input } from '@repo/ui/components/ui/input';
 import { Label } from '@repo/ui/components/ui/label';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { PropsWithChildren } from 'react';
-import { useToast } from "@repo/ui/hooks/use-toast"
+import React, { PropsWithChildren, useState } from 'react';
+import { useWorkspace } from '@/hooks/workspace';
 
 const WorkspaceForm = ({ children }: PropsWithChildren) => {
-    const queryClient = useQueryClient();
-    const { toast } = useToast()
-    const mutation = useMutation({
-        mutationFn: async (formData: FormData) => createWorkspace(undefined, formData),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ['workspaces']
-            });
-
-            toast({
-                title: "Success",
-                description: "You've created a new workspace!",
-            })
-
-        },
-        onError: (error: any) => {
-            console.error("Error creating workspace:", error);
-            toast({
-                title: "Error",
-                description: "Error creating workspace!",
-            })
-        }
-    });
+    const { createWorkspace } = useWorkspace();
+    const [errors, setErrors] = useState<string[]>([]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
-        mutation.mutate(formData);
+
+        createWorkspace({
+            setErrors,
+            name: formData.get('name'),
+        });
     };
 
     return (
@@ -44,6 +26,13 @@ const WorkspaceForm = ({ children }: PropsWithChildren) => {
                         <Label htmlFor="name">Workspace name</Label>
                         <Input id="name" name="name" placeholder="Acme Inc." />
                     </div>
+                    {errors.length > 0 && (
+                        <div className="text-red-500">
+                            {errors.map((error, index) => (
+                                <p key={index}>{error}</p>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
             {children}

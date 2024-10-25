@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getWorkspaces } from "@/lib/actions";
 import WorkspaceSwitcherSkeleton from "./workspace-switcher-skeleton";
 import {
     Dialog,
@@ -42,25 +40,25 @@ import {
 import WorkspaceForm from "./forms/workspaceForm";
 import SubmitButton from "./ui/submit-button";
 import { Workspace } from "@/lib/type";
+import { useWorkspace } from "@/hooks/workspace";
+import useWorkspaceStore from "@/stores/workspaceStore";
 
 const WorkspaceSwitcher = () => {
-
-    const { data, error, isLoading } = useQuery(
-        {
-            queryKey: ['workspaces'],
-            queryFn: async () => await getWorkspaces(),
-        }
-    );
-
+    const {
+        workspaces,
+        isLoading,
+        isError,
+        switchWorkspace,
+    } = useWorkspace();
 
     const [open, setOpen] = React.useState(false);
     const [showNewWorkspaceDialog, setShowNewWorkspaceDialog] = React.useState(false);
-    const [selectedWorkspace, setSelectedWorkspace] = React.useState({ id: "", name: "" });
+    const { currentWorkspaceId } = useWorkspaceStore();
+
+    const currentWorkspace = workspaces?.find(workspace => workspace.id === currentWorkspaceId);
 
     if (isLoading) return <WorkspaceSwitcherSkeleton />;
-    if (error) return <div>Error loading workspaces.</div>;
-
-    const workspaces = data || [];
+    if (isError) return <div>Error loading workspaces.</div>;
 
     return (
         <Dialog open={showNewWorkspaceDialog} onOpenChange={setShowNewWorkspaceDialog}>
@@ -75,13 +73,13 @@ const WorkspaceSwitcher = () => {
                     >
                         <Avatar className="mr-2 h-5 w-5">
                             <AvatarImage
-                                src={`https://avatar.vercel.sh/${selectedWorkspace.id}.png`}
-                                alt={selectedWorkspace.name}
+                                src={`https://avatar.vercel.sh/${currentWorkspace?.id}.png`}
+                                alt={currentWorkspace?.name}
                                 className="grayscale"
                             />
                             <AvatarFallback>SC</AvatarFallback>
                         </Avatar>
-                        {selectedWorkspace.name || "Select a workspace"}
+                        {currentWorkspace?.name || "Select a workspace"}
                         <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -90,11 +88,11 @@ const WorkspaceSwitcher = () => {
                         <CommandInput placeholder="Search workspace..." />
                         <CommandList>
                             <CommandEmpty>No workspace found.</CommandEmpty>
-                            {workspaces.map((workspace: Workspace) => (
+                            {workspaces?.map((workspace: Workspace) => (
                                 <CommandItem
                                     key={workspace.id}
                                     onSelect={() => {
-                                        setSelectedWorkspace(workspace);
+                                        switchWorkspace({ workspaceId: workspace.id }); // Switch workspace on selection
                                         setOpen(false);
                                     }}
                                     className="text-sm"
@@ -111,7 +109,7 @@ const WorkspaceSwitcher = () => {
                                     <CheckIcon
                                         className={cn(
                                             "ml-auto h-4 w-4",
-                                            selectedWorkspace.id === workspace.id ? "opacity-100" : "opacity-0"
+                                            currentWorkspace?.id === workspace.id ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>
