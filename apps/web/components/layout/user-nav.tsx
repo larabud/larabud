@@ -1,5 +1,6 @@
 "use client"
 import { Session } from "@/lib/type"
+import useWorkspaceStore from "@/stores/workspaceStore"
 import {
     Avatar,
     AvatarFallback,
@@ -19,6 +20,7 @@ import {
 import { ModeToggle } from "@repo/ui/components/ui/mode-toggle"
 
 export function UserNav({ session }: { session: Session }) {
+    const { removeWorkspaceId } = useWorkspaceStore();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -54,7 +56,7 @@ export function UserNav({ session }: { session: Session }) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                    <a href={`/api/logout`}>
+                    <a href={`/api/logout`} onClick={removeWorkspaceId}>
                         Logout
                         <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
                     </a>
