@@ -8,10 +8,10 @@ interface WorkspaceState {
 type SetState<T> = (partial: Partial<T> | ((state: T) => Partial<T>)) => void;
 
 const useWorkspaceStore = create<WorkspaceState>((set: SetState<WorkspaceState>) => ({
-    currentWorkspaceId: localStorage.getItem('currentWorkspaceId') || null,
+    currentWorkspaceId: localStorage.getItem('workspace-id') || null,
     setWorkspaceId: (workspaceId: string) => {
         set({ currentWorkspaceId: workspaceId });
-        localStorage.setItem('currentWorkspaceId', workspaceId);
+        localStorage.setItem('workspace-id', workspaceId);
     },
 }));
 
