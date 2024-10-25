@@ -1,4 +1,4 @@
-"use server";
+"use server"
 import { authFetch } from "./authFetch";
 import { BACKEND_URL } from "./constants";
 import { WorkspaceFormSchema, WorkspaceFormState } from "./type"
@@ -31,7 +31,6 @@ export async function createWorkspace(state: WorkspaceFormState, formData: FormD
     });
 
     if (!response.ok) {
-
         return {
             message: response.status === 409
                 ? "A project with this title already exists"
