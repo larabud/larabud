@@ -13,6 +13,9 @@
     ],
     "./hooks/*": [
       "./src/hooks/*.ts"
+    ],
+    "./fonts/*": [
+      "./src/fonts/*.*"
     ]
   },
   "scripts": {

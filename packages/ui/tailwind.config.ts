@@ -20,6 +20,10 @@ const config = {
             },
         },
         extend: {
+            fontFamily: {
+                sans: ["JetBrains Mono", "sans-serif"],
+                mono: ["JetBrains Mono", "monospace"],
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
