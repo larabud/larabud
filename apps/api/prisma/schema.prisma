@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String?
+  RepoProviders  RepoProvider[]   @relation("UserRepoProvider")
+  Workspaces     Workspace[]      @relation("UserWorkspace")
+  OwnedProjects  Project[]
+  Server         Server[]
+  ServerProvider ServerProvider[] @relation("UserServerProvider")
+}
+
+model RepoProvider {
+  id             Int       @id @default(autoincrement())
+  name           String
+  appId          String?
+  accessToken    String?
+  refreshToken   String?
+  tokenExpiresAt DateTime?
+  userId         Int
+  user           User      @relation("UserRepoProvider", fields: [userId], references: [id])
+  isOauthable    Boolean   @default(false)
+
+  @@unique([userId, name])
+}
+
+model ServerProvider {
+  id        Int     @id @default(autoincrement())
+  name      String
+  User      User?   @relation("UserServerProvider", fields: [userId], references: [id])
+  userId    Int?
+  accessKey String
+  secretKey String?
+
+  @@unique([userId, name])
+}
+
+model Workspace {
+  id       String    @id @default(uuid())
+  name     String
+  Users    User[]    @relation("UserWorkspace")
+  Projects Project[] @relation("WorkspaceProject")
+  Servers  Server[]  @relation("WorkspaceServer")
+}
+
+model Project {
+  id          Int        @id @default(autoincrement())
+  name        String
+  ownerId     Int
+  owner       User       @relation(fields: [ownerId], references: [id])
+  Workspace   Workspace? @relation("WorkspaceProject", fields: [workspaceId], references: [id])
+  workspaceId String?
+}
+
+model Server {
+  id          Int        @id @default(autoincrement())
+  name        String
+  ownerId     Int
+  owner       User       @relation(fields: [ownerId], references: [id])
+  Workspace   Workspace? @relation("WorkspaceServer", fields: [workspaceId], references: [id])
+  workspaceId String?
+}
