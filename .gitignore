@@ -27,6 +27,7 @@ out/
 build
 dist
 
+postgres_data
 
 # Debug
 npm-debug.log*

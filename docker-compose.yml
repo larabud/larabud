@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: "postgres:latest"
+    healthcheck:
+      test: [ "CMD", "nc", "-zv", "localhost", "5432" ]
+      interval: 1s
+      timeout: 10s
+    environment:
+      POSTGRES_DB: larabud
+      POSTGRES_USER: larabud
+      POSTGRES_PASSWORD: password
+      PGPASSWORD: password
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

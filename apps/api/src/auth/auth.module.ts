@@ -12,22 +12,31 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshJwtStrategy } from './strategies/refresh-token.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { ClsModule } from 'nestjs-cls';
+import githubOauthConfig from 'src/repo-provider/config/github-oauth.config';
+import { GithubStrategy } from 'src/repo-provider/strategies/github.strategy';
+import { GithubService } from 'src/repo-provider/github/github.service';
+import { RepositoryProviderService } from 'src/repo-provider/repo-provider.service';
 
 @Module({
   imports: [
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshConfig),
+    ConfigModule.forFeature(githubOauthConfig),
 
+    ClsModule.forFeature()
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     UserService,
     PrismaService,
+    GithubService,
     LocalStrategy,
     RefreshJwtStrategy,
     JwtStrategy,
+    GithubStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

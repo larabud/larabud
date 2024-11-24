@@ -20,7 +20,7 @@ export class AuthService {
     ) { }
 
     async register(createUserDto: CreateUserDto): Promise<User> {
-        const user = await this.userService.findOneByEmail(createUserDto.email);
+        const user = await this.userService.findByEmail(createUserDto.email);
         if (user) {
             throw new ConflictException("User already exists!")
         }
@@ -38,12 +38,12 @@ export class AuthService {
     }
 
     async validateUser(email: string, password: string): Promise<AuthenticatedUser> {
-        const user = await this.userService.findOneByEmail(email)
+        const user = await this.userService.findByEmail(email)
         if (!user) {
             throw new UnauthorizedException("User not found!");
         }
 
-        const isPasswordMatched = verify(user.password, password);
+        const isPasswordMatched = await verify(user.password, password);
         if (!isPasswordMatched) {
             throw new UnauthorizedException("Invalid Credentials!");
         }

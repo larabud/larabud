@@ -1,4 +1,6 @@
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { decrypt } from "./lib/session";
 
 export const config = {
     matcher: [
@@ -16,7 +18,7 @@ export const config = {
 export default async function middleware(req: NextRequest) {
     const url = req.nextUrl;
 
-    // Get hostname of request (e.g. app.larabud.com, app.localhost:3000)
+    // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
     let hostname = req.headers
         .get("host")!
         .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
@@ -31,7 +33,7 @@ export default async function middleware(req: NextRequest) {
     }
 
     const searchParams = req.nextUrl.searchParams.toString();
-    // Get the pathname of the request (e.g. /, /page,)
+    // Get the pathname of the request (e.g. /, /about, /blog/first-post)
     const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
         }`;
 
@@ -46,6 +48,27 @@ export default async function middleware(req: NextRequest) {
         );
     }
 
+    // rewrites for app pages
+    if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+        const cookie = cookies().get('session')?.value;
+        if (!cookie) {
+            if (path !== "/login") {
+                return NextResponse.redirect(new URL("/login", req.url));
+            }
+        } else {
+            const session = await decrypt(cookie);
+
+            if (!session && path !== "/login") {
+                return NextResponse.redirect(new URL("/login", req.url)); // Redirect to login if session is invalid or expired
+            } else if (session && path === "/login") {
+                return NextResponse.redirect(new URL("/", req.url)); // Redirect to home if already logged in
+            }
+        }
+
+        return NextResponse.rewrite(
+            new URL(`/app${path === "/" ? "" : path}`, req.url),
+        );
+    }
     // rewrite everything else to `/[domain]/[slug] dynamic route
     return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }
