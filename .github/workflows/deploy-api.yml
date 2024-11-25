@@ -17,7 +17,8 @@ jobs:
       # Step 2: Log in to Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
-       
+        with:
+            mask-password: true
 
       # Step 3: Build and tag the Docker image
       - name: Build Docker Image
