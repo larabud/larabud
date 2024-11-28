@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cn } from "@repo/ui/lib/utils";
 import { getSession } from "@/lib/session";
 import WorkspaceSwitcher from "../workspace-switcher";
+import FeedbackPopover from "../forms/feedback-popover";
 
 export async function MainNav({
     className,
@@ -31,7 +32,7 @@ export async function MainNav({
                                 href="/examples/dashboard"
                                 className="text-sm flex items-center gap-1 font-medium transition-colors hover:text-primary"
                             >
-                                Feedback
+                                <FeedbackPopover className="text-sm" />
                             </Link>
                             <Link
                                 href="/examples/dashboard"
@@ -50,12 +51,8 @@ export async function MainNav({
                             >
                                 Docs
                             </Link>
-                            <Link
-                                href="/examples/dashboard"
-                                className="text-sm flex items-center gap-1 font-medium transition-colors hover:text-primary"
-                            >
-                                Feedback
-                            </Link>
+
+                            <FeedbackPopover className="text-sm" />
                             <Link
                                 href="/examples/dashboard"
                                 className="text-sm flex items-center gap-1 font-medium transition-colors hover:text-primary"

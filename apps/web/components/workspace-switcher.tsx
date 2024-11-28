@@ -69,9 +69,9 @@ const WorkspaceSwitcher = () => {
                         role="combobox"
                         aria-expanded={open}
                         aria-label="Select a workspace"
-                        className={cn("w-[200px] mx-0 px-1 justify-between font-thin hover:no-underline")}
+                        className={cn("w-[200px] flex mx-0 items-center justify-between text-xs font-thin hover:no-underline")}
                     >
-                        <Avatar className="mr-2 h-5 w-5">
+                        <Avatar className="h-5 w-5">
                             <AvatarImage
                                 src={`https://avatar.vercel.sh/${currentWorkspace?.id}.png`}
                                 alt={currentWorkspace?.name}
